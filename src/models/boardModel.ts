@@ -1,6 +1,7 @@
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-import mongoose from 'mongoose';
-import { boardSchema } from './schemes/boardSchema';
+var mongoose = require('mongoose');
+var boardSchema = require('./schemes/boardSchema');
 
-export const Board = mongoose.model('Board', boardSchema);
+var Board = mongoose.model('Board', boardSchema);
+
+module.exports = Board;

@@ -1,8 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import mongoose from 'mongoose';
-import { columnSchema } from './columnSchema';
+var mongoose = require('mongoose');
+var columnSchema = require('./columnSchema');
 
-export const boardSchema = new mongoose.Schema(
+var boardSchema = new mongoose.Schema(
   {
     id: {
       type: String,
@@ -18,3 +17,5 @@ export const boardSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+module.exports = boardSchema;

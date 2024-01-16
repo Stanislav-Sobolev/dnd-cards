@@ -1,13 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.boardSchema = void 0;
-// eslint-disable-next-line import/no-extraneous-dependencies
-const mongoose_1 = __importDefault(require("mongoose"));
-const columnSchema_1 = require("./columnSchema");
-exports.boardSchema = new mongoose_1.default.Schema({
+var mongoose = require('mongoose');
+var columnSchema = require('./columnSchema');
+var boardSchema = new mongoose.Schema({
     id: {
         type: String,
         required: true,
@@ -16,8 +10,9 @@ exports.boardSchema = new mongoose_1.default.Schema({
         type: String,
         required: [true, 'Please enter a board name'],
     },
-    columnsData: [columnSchema_1.columnSchema],
+    columnsData: [columnSchema],
 }, {
     timestamps: true,
 });
+module.exports = boardSchema;
 //# sourceMappingURL=boardSchema.js.map

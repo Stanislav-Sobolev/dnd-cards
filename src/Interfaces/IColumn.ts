@@ -1,7 +1,9 @@
-import { ICard } from './ICard';
+import ICard from './ICard';
 
-export interface IColumn { 
+interface IColumn { 
   id: number; 
   title: string; 
   items: ICard[]; 
 }
+
+export default IColumn;

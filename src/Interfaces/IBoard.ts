@@ -1,8 +1,10 @@
-import { IColumn } from './IColumn';
+import IColumn from './IColumn';
 
-export interface IBoard { 
-  id: string; 
-  name: string; 
-  columnsData: IColumn[]; 
-  save(): void;
-}
+interface  IBoard {
+  id: String,
+  name: String,
+  columnsData: [IColumn],
+  save: () => void
+};
+
+export default IBoard;

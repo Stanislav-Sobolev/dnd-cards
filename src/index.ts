@@ -1,12 +1,11 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import app from './app';
+var mongoose = require('mongoose');
+var dotenv = require('dotenv');
+var app = require('./app');
 
 dotenv.config();
 
-const PORT = process.env.PORT || 4000;
-const HOST: string | undefined = process.env.DB_HOST;
+var PORT = process.env.PORT || 4000;
+var HOST = process.env.DB_HOST;
 
 if (!HOST) {
   console.error('DB_HOST is not defined in the environment variables.');
@@ -16,12 +15,12 @@ if (!HOST) {
 mongoose.set('strictQuery', false);
 mongoose
   .connect(HOST)
-  .then(() => {
+  .then(function () {
     console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Node API app is running on port ${PORT}`);
+    app.listen(PORT, function () {
+      console.log('Node API app is running on port ' + PORT);
     });
   })
-  .catch((error) => {
+  .catch(function (error: any) {
     console.log(error);
   });

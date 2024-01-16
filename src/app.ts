@@ -1,29 +1,31 @@
-import express, { Request, Response } from 'express';
-import crypto from 'crypto';
-import cors from 'cors';
-import { Board } from './models/boardModel';
-import { ICard, IColumn, IBoard } from './Interfaces';
-
-const app = express();
+var express = require('express');
+var cryptoModule  = require('crypto');
+var cors = require('cors');
+var Board = require('./models/boardModel');
+import IBoard from './Interfaces/IBoard';
+import IColumn from './Interfaces/IColumn';
+import ICard from './Interfaces/ICard';
+var app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const hashId = (id: string) => {
-  const hash = crypto.createHash('sha256');
+var hashId = function (id: string) {
+  var hash = cryptoModule .createHash('sha256');
   hash.update(id.toString());
   return hash.digest('hex');
 };
 
 // Get a board by ID
-app.get('/board/:id', async (req: Request, res: Response) => {
+app.get('/board/:id', async function (req: any, res: any) {
   try {
-    const { id } = req.params;
-    const board: IBoard | null = await Board.findOne({ id: hashId(id) });
+    const id = req.params.id;
+    
+    const board = await Board.findOne({ id: hashId(id) });
 
     if (!board) {
-      return res.status(404).json({ message: `Cannot find any board with ID ${id}` });
+      return res.status(404).json({ message: 'Cannot find any board with ID ' + id });
     }
 
     res.status(200).json(board);
@@ -33,7 +35,7 @@ app.get('/board/:id', async (req: Request, res: Response) => {
 });
 
 // Create a board
-app.post('/board', async (req: Request, res: Response) => {
+app.post('/board', async (req: any, res: any) => {
   try {
     req.body.id = hashId(req.body.id);
     const board = await Board.create(req.body);
@@ -44,7 +46,7 @@ app.post('/board', async (req: Request, res: Response) => {
 });
 
 // Update a board name
-app.put('/board/:id', async (req: Request, res: Response) => {
+app.put('/board/:id', async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
@@ -59,7 +61,7 @@ app.put('/board/:id', async (req: Request, res: Response) => {
 });
 
 // Delete a board
-app.delete('/board/:id', async (req: Request, res: Response) => {
+app.delete('/board/:id', async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const board: IBoard | null = await Board.findOneAndDelete({ id });
@@ -73,7 +75,7 @@ app.delete('/board/:id', async (req: Request, res: Response) => {
 });
 
 // Create a card
-app.post('/card/:boardId/:columnId', async (req: Request, res: Response) => {
+app.post('/card/:boardId/:columnId', async (req: any, res: any) => {
   try {
     const { boardId, columnId } = req.params;
     const board: IBoard | null = await Board.findOne({ id: boardId });
@@ -98,7 +100,7 @@ app.post('/card/:boardId/:columnId', async (req: Request, res: Response) => {
 });
 
 // Update a card
-app.put('/card/:boardId/:columnId/:cardId', async (req: Request, res: Response) => {
+app.put('/card/:boardId/:columnId/:cardId', async (req: any, res: any) => {
   try {
     const { boardId, columnId, cardId } = req.params;
     const board: IBoard | null = await Board.findOne({ id: boardId });
@@ -128,7 +130,7 @@ app.put('/card/:boardId/:columnId/:cardId', async (req: Request, res: Response) 
 });
 
 // Drag and Drop card
-app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (req: Request, res: Response) => {
+app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (req: any, res: any) => {
   try {
     const {
       boardId,
@@ -167,7 +169,7 @@ app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (
 });
 
 // Delete a card
-app.delete('/card/:boardId/:columnId/:cardId', async (req: Request, res: Response) => {
+app.delete('/card/:boardId/:columnId/:cardId', async (req: any, res: any) => {
   try {
     const { boardId, columnId, cardId } = req.params;
     const board: IBoard | null = await Board.findOne({ id: boardId });
@@ -195,4 +197,4 @@ app.delete('/card/:boardId/:columnId/:cardId', async (req: Request, res: Respons
   }
 });
 
-export default app;
+module.exports= app;

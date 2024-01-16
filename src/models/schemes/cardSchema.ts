@@ -1,7 +1,6 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import mongoose from 'mongoose';
+var mongoose = require('mongoose');
 
-export const cardSchema = new mongoose.Schema(
+var cardSchema = new mongoose.Schema(
   {
     id: {
       type: Number,
@@ -20,3 +19,5 @@ export const cardSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+module.exports = cardSchema;

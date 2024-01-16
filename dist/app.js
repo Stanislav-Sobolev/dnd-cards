@@ -1,28 +1,25 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const crypto_1 = __importDefault(require("crypto"));
-const cors_1 = __importDefault(require("cors"));
-const boardModel_1 = require("./models/boardModel");
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: false }));
-const hashId = (id) => {
-    const hash = crypto_1.default.createHash('sha256');
+var express = require('express');
+var cryptoModule = require('crypto');
+var cors = require('cors');
+var Board = require('./models/boardModel');
+var app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+var hashId = function (id) {
+    var hash = cryptoModule.createHash('sha256');
     hash.update(id.toString());
     return hash.digest('hex');
 };
 // Get a board by ID
-app.get('/board/:id', async (req, res) => {
+app.get('/board/:id', async function (req, res) {
     try {
-        const { id } = req.params;
-        const board = await boardModel_1.Board.findOne({ id: hashId(id) });
+        const id = req.params.id;
+        const board = await Board.findOne({ id: hashId(id) });
         if (!board) {
-            return res.status(404).json({ message: `Cannot find any board with ID ${id}` });
+            return res.status(404).json({ message: 'Cannot find any board with ID ' + id });
         }
         res.status(200).json(board);
     }
@@ -34,7 +31,7 @@ app.get('/board/:id', async (req, res) => {
 app.post('/board', async (req, res) => {
     try {
         req.body.id = hashId(req.body.id);
-        const board = await boardModel_1.Board.create(req.body);
+        const board = await Board.create(req.body);
         res.status(200).json(board);
     }
     catch (error) {
@@ -46,7 +43,7 @@ app.put('/board/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { name } = req.body;
-        const board = await boardModel_1.Board.findOneAndUpdate({ id }, { name }, { new: true });
+        const board = await Board.findOneAndUpdate({ id }, { name }, { new: true });
         if (!board) {
             return res.status(404).json({ message: `Cannot find any board with ID ${id}` });
         }
@@ -60,7 +57,7 @@ app.put('/board/:id', async (req, res) => {
 app.delete('/board/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const board = await boardModel_1.Board.findOneAndDelete({ id });
+        const board = await Board.findOneAndDelete({ id });
         if (!board) {
             return res.status(404).json({ message: `Cannot find any board with ID ${id}` });
         }
@@ -74,7 +71,7 @@ app.delete('/board/:id', async (req, res) => {
 app.post('/card/:boardId/:columnId', async (req, res) => {
     try {
         const { boardId, columnId } = req.params;
-        const board = await boardModel_1.Board.findOne({ id: boardId });
+        const board = await Board.findOne({ id: boardId });
         if (!board) {
             return res.status(404).json({ message: `Cannot find any board with ID ${boardId}` });
         }
@@ -95,7 +92,7 @@ app.post('/card/:boardId/:columnId', async (req, res) => {
 app.put('/card/:boardId/:columnId/:cardId', async (req, res) => {
     try {
         const { boardId, columnId, cardId } = req.params;
-        const board = await boardModel_1.Board.findOne({ id: boardId });
+        const board = await Board.findOne({ id: boardId });
         if (!board) {
             return res.status(404).json({ message: `Cannot find any board with ID ${boardId}` });
         }
@@ -119,7 +116,7 @@ app.put('/card/:boardId/:columnId/:cardId', async (req, res) => {
 app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (req, res) => {
     try {
         const { boardId, columnId, cardId, toColumnId, toCardIndexId, } = req.params;
-        const board = await boardModel_1.Board.findOne({ id: boardId });
+        const board = await Board.findOne({ id: boardId });
         if (!board) {
             return res.status(404).json({ message: `Cannot find any board with ID ${boardId}` });
         }
@@ -146,7 +143,7 @@ app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (
 app.delete('/card/:boardId/:columnId/:cardId', async (req, res) => {
     try {
         const { boardId, columnId, cardId } = req.params;
-        const board = await boardModel_1.Board.findOne({ id: boardId });
+        const board = await Board.findOne({ id: boardId });
         if (!board) {
             return res.status(404).json({ message: `Cannot find any board with ID ${boardId}` });
         }
@@ -166,5 +163,5 @@ app.delete('/card/:boardId/:columnId/:cardId', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-exports.default = app;
+module.exports = app;
 //# sourceMappingURL=app.js.map

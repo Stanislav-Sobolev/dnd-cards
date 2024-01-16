@@ -1,12 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.cardSchema = void 0;
-// eslint-disable-next-line import/no-extraneous-dependencies
-const mongoose_1 = __importDefault(require("mongoose"));
-exports.cardSchema = new mongoose_1.default.Schema({
+var mongoose = require('mongoose');
+var cardSchema = new mongoose.Schema({
     id: {
         type: Number,
         required: true,
@@ -22,4 +16,5 @@ exports.cardSchema = new mongoose_1.default.Schema({
 }, {
     timestamps: true,
 });
+module.exports = cardSchema;
 //# sourceMappingURL=cardSchema.js.map
