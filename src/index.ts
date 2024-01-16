@@ -1,20 +1,27 @@
-import express, { Application } from "express";
-import cors, { CorsOptions } from "cors";
-import Routes from "./routes";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import app from './app';
 
-export default class Server {
-  constructor(app: Application) {
-    this.config(app);
-    new Routes(app);
-  }
+dotenv.config();
 
-  private config(app: Application): void {
-    const corsOptions: CorsOptions = {
-      origin: "http://localhost:8081"
-    };
+const PORT = process.env.PORT || 4000;
+const HOST: string | undefined = process.env.DB_HOST;
 
-    app.use(cors(corsOptions));
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-  }
+if (!HOST) {
+  console.error('DB_HOST is not defined in the environment variables.');
+  process.exit(1);
 }
+
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(HOST)
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(PORT, () => {
+      console.log(`Node API app is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
