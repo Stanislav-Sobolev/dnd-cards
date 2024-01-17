@@ -18,7 +18,7 @@ mongoose
         console.log('Node API app is running on port ' + PORT);
     });
 })
-    .catch(function (error) {
-    console.log(error);
+    .catch((error) => {
+    console.error(error.message);
 });
 //# sourceMappingURL=index.js.map

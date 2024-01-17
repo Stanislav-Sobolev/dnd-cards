@@ -2,9 +2,13 @@ var express = require('express');
 var cryptoModule  = require('crypto');
 var cors = require('cors');
 var Board = require('./models/boardModel');
+
+//imports for Typescript
+import { Request, Response } from 'express';
 import IBoard from './Interfaces/IBoard';
 import IColumn from './Interfaces/IColumn';
 import ICard from './Interfaces/ICard';
+
 var app = express();
 
 app.use(cors());
@@ -18,7 +22,7 @@ var hashId = function (id: string) {
 };
 
 // Get a board by ID
-app.get('/board/:id', async function (req: any, res: any) {
+app.get('/board/:id', async function (req: Request, res: Response) {
   try {
     const id = req.params.id;
     
@@ -29,24 +33,32 @@ app.get('/board/:id', async function (req: any, res: any) {
     }
 
     res.status(200).json(board);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Create a board
-app.post('/board', async (req: any, res: any) => {
+app.post('/board', async (req: Request, res: Response) => {
   try {
     req.body.id = hashId(req.body.id);
     const board = await Board.create(req.body);
     res.status(200).json(board);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Update a board name
-app.put('/board/:id', async (req: any, res: any) => {
+app.put('/board/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
@@ -55,13 +67,17 @@ app.put('/board/:id', async (req: any, res: any) => {
       return res.status(404).json({ message: `Cannot find any board with ID ${id}` });
     }
     res.status(200).json(board);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Delete a board
-app.delete('/board/:id', async (req: any, res: any) => {
+app.delete('/board/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const board: IBoard | null = await Board.findOneAndDelete({ id });
@@ -69,13 +85,17 @@ app.delete('/board/:id', async (req: any, res: any) => {
       return res.status(404).json({ message: `Cannot find any board with ID ${id}` });
     }
     res.status(200).json(board);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Create a card
-app.post('/card/:boardId/:columnId', async (req: any, res: any) => {
+app.post('/card/:boardId/:columnId', async (req: Request, res: Response) => {
   try {
     const { boardId, columnId } = req.params;
     const board: IBoard | null = await Board.findOne({ id: boardId });
@@ -94,13 +114,17 @@ app.post('/card/:boardId/:columnId', async (req: any, res: any) => {
     await board.save();
 
     res.status(200).json(card);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Update a card
-app.put('/card/:boardId/:columnId/:cardId', async (req: any, res: any) => {
+app.put('/card/:boardId/:columnId/:cardId', async (req: Request, res: Response) => {
   try {
     const { boardId, columnId, cardId } = req.params;
     const board: IBoard | null = await Board.findOne({ id: boardId });
@@ -124,13 +148,17 @@ app.put('/card/:boardId/:columnId/:cardId', async (req: any, res: any) => {
     await board.save();
 
     res.status(200).json(column.items[cardIndex]);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Drag and Drop card
-app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (req: any, res: any) => {
+app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (req: Request, res: Response) => {
   try {
     const {
       boardId,
@@ -163,13 +191,17 @@ app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (
     await board.save();
 
     res.status(200).json(card);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 
 // Delete a card
-app.delete('/card/:boardId/:columnId/:cardId', async (req: any, res: any) => {
+app.delete('/card/:boardId/:columnId/:cardId', async (req: Request, res: Response) => {
   try {
     const { boardId, columnId, cardId } = req.params;
     const board: IBoard | null = await Board.findOne({ id: boardId });
@@ -192,8 +224,12 @@ app.delete('/card/:boardId/:columnId/:cardId', async (req: any, res: any) => {
     await board.save();
 
     res.status(200).json(deletedCard);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error });
+    }
   }
 });
 

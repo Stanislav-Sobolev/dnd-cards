@@ -2,16 +2,12 @@
   "name": "express-typescript-dnd-api",
   "version": "1.0.0",
   "description": "Rest API using Node.js, TypeScript, Express",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --watch src/**/*.ts --exec ts-node ./src/index.ts",
     "build": "tsc",
     "start": "node ./dist/index.js",
-    "lint": "eslint --fix --quiet src/**/*.ts",
-    "format": "prettier --loglevel silent --write src/**/*.ts",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "lint": "eslint --fix --quiet src/**/*.ts"
   },
   "keywords": [],
   "author": "9870102@gmail.com",

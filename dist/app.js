@@ -24,7 +24,12 @@ app.get('/board/:id', async function (req, res) {
         res.status(200).json(board);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Create a board
@@ -35,7 +40,12 @@ app.post('/board', async (req, res) => {
         res.status(200).json(board);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Update a board name
@@ -50,7 +60,12 @@ app.put('/board/:id', async (req, res) => {
         res.status(200).json(board);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Delete a board
@@ -64,7 +79,12 @@ app.delete('/board/:id', async (req, res) => {
         res.status(200).json(board);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Create a card
@@ -85,7 +105,12 @@ app.post('/card/:boardId/:columnId', async (req, res) => {
         res.status(200).json(card);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Update a card
@@ -109,7 +134,12 @@ app.put('/card/:boardId/:columnId/:cardId', async (req, res) => {
         res.status(200).json(column.items[cardIndex]);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Drag and Drop card
@@ -136,7 +166,12 @@ app.patch('/card/:boardId/:columnId/:cardId/:toColumnId/:toCardIndexId', async (
         res.status(200).json(card);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 // Delete a card
@@ -160,7 +195,12 @@ app.delete('/card/:boardId/:columnId/:cardId', async (req, res) => {
         res.status(200).json(deletedCard);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: error });
+        }
     }
 });
 module.exports = app;
