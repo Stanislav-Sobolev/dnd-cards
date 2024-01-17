@@ -21,6 +21,6 @@ mongoose
       console.log('Node API app is running on port ' + PORT);
     });
   })
-  .catch((error: Error) => {
-    console.error(error.message);
+.catch(function (error: Error) {
+    console.log(error);
   });
