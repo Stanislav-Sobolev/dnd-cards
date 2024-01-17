@@ -88,7 +88,7 @@ exports.createCard = async (req, res) => {
         if (!column) {
             return res.status(404).json({ message: `Cannot find any column with ID ${columnId}` });
         }
-        const card = { ...req.body, id: Date.now().toString() };
+        const card = { ...req.body };
         column.items.push(card);
         await board.save();
         res.status(200).json(card);
@@ -139,8 +139,8 @@ exports.dragAndDropCard = async (req, res) => {
         }
         const columnFrom = board.columnsData.find((col) => col.id === parseInt(columnId));
         const columnTo = board.columnsData.find((col) => col.id === parseInt(toColumnId));
-        if (!columnFrom) {
-            return res.status(404).json({ message: `Cannot find any column with ID ${columnId}` });
+        if (!columnFrom || !columnTo) {
+            return res.status(404).json({ message: `Cannot find any column with ID ${columnId} or ${columnTo}` });
         }
         const cardIndex = columnFrom.items.findIndex((c) => c.id === parseInt(cardId));
         if (cardIndex === -1) {
@@ -148,7 +148,7 @@ exports.dragAndDropCard = async (req, res) => {
         }
         const card = columnFrom.items[cardIndex];
         columnFrom.items.splice(cardIndex, 1);
-        columnTo?.items.splice(Number(toCardIndexId), 0, card);
+        columnTo.items.splice(Number(toCardIndexId), 0, card);
         await board.save();
         res.status(200).json(card);
     }
